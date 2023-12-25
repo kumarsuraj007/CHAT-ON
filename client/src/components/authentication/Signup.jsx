@@ -52,7 +52,7 @@ const Signup = () => {
         },
       };
       const { data } = await axios.post(
-        "http://localhost:5000/api/authentication/register",
+        "http://localhost:5000/api/user/register",
         {
           name,
           email,

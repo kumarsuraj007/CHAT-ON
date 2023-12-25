@@ -52,4 +52,18 @@ export const loginUser = asyncHandler(async (req, res) => {
         res.status(400);
         throw new Error({message: 'Email and password are invalid!'})
     }
+});
+
+// Search User 
+export const searchUser = asyncHandler(async (req, res) => {
+    const keyword = req.query.search
+    ? {
+        $or: [
+            {name: {$regex: req.query.search, $options: 'i'}},
+            {email: {$regex: req.query.search, $options: 'i'}},
+        ]
+    } : {}; 
+
+    const users = await userModel.find(keyword).find({_id: {$ne: req.user._id}}) // Don't return the login user
+    res.json(users)
 })

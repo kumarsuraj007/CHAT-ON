@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import userRoute from "./routes/userRoutes.js";
+import chatRoute from "./routes/userRoutes.js";
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 
 const app = express();
@@ -23,7 +24,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // routes
-app.use("/api/authentication", userRoute);
+app.use("/api/user", userRoute);
+app.use("/api/chat", chatRoute);
 app.use(notFound);
 app.use(errorHandler);
 
