@@ -1,36 +1,30 @@
-import express from 'express';
-import dotenv from 'dotenv';
-import cors from 'cors'
-import {chats} from './config/data.js'
+import express from "express";
+import dotenv from "dotenv";
+import cors from "cors";
+import userRoute from "./routes/userRoutes.js";
+import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 
 const app = express();
-const port = process.env.PORT || 4000;
 
-dotenv.config({path: './config/.env'})
+dotenv.config({ path: "./config/.env" });
 
 // Database configuration
-import connectDB from './config/db.js';
+import connectDB from "./config/db.js";
 connectDB();
 
-// Middleware 
+// Middleware
 const corsOptions = {
-    origin: 'http://localhost:5173',
-    credentials: true,
-  };
+  origin: "http://localhost:5173",
+  credentials: true,
+};
 
-  app.use(cors(corsOptions));
-  app.use(express.json());
-  app.use(express.urlencoded({extended: true}))
+app.use(cors(corsOptions));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// routes 
-app.get('/api/chat', (req, res) => {
-    res.send(chats)
-});
+// routes
+app.use("/api/authentication", userRoute);
+app.use(notFound);
+app.use(errorHandler);
 
-app.get('/api/chat/:id', (req, res) => {
-    const singleChat = chats.find((c) => c._id === req.params.id);
-    res.send(singleChat)
-})
-
-
-app.listen(port, () => console.log(`Server started at localhost: ${port}`));
+app.listen(5000, () => console.log(`Server started at localhost: 5000`));
